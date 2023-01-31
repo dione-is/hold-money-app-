@@ -1,19 +1,14 @@
-import { render } from '@testing-library/react';
+import 'bootswatch/dist/quartz/bootstrap.css';
 import React from 'react';
-import './App.css';
+import Login from './views/login';
 
 class App extends React.Component {
-  state =  {
-    nome :'Dione Santos'
-  }
-  render() {
-    return (
+  render(){
+    return(
       <div>
-        <label>Nome:</label>
-        <input type="text" value={this.state.nome} onChange={(e) => this.setState({nome: e.target.value})}/>
-        o nome digitado foi: {this.state.nome}
+        <Login/>
       </div>
-    );
+    )
   }
 }
 
