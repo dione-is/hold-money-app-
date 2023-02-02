@@ -47,7 +47,7 @@ class Login extends React.Component {
                                             </FormGroup>
                                             <div className='col-sm-12' style={{marginTop: '20px'}}>
                                                 <button type='button' onClick={this.entrar} className="btn btn-success col-sm-4">Entrar</button>
-                                                <button type='button' className="btn btn-danger col-sm-4 col-sm-offset-4" style={{marginLeft: '20px'}}>Cadastrar</button>
+                                                <button type='button' className="btn btn-danger col-sm-4" style={{marginLeft: '20px'}}>Cadastrar</button>
                                             </div>
                                         </fieldset>
                                     </div>
