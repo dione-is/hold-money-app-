@@ -12,12 +12,11 @@ function NavBar() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarResponsive">
                     <ul className="navbar-nav">
-                        <NavBarItem href="#/login" label="Inicio"/>
+                        <NavBarItem href="#/home" label="Inicio"/>
                         <NavBarItem href='#/novo-usuario' label='Usuarios'/>
                         <NavBarItem href='#/' label='Lancamentos'/>
-                        <NavBarItem href='#' label='login' />
+                        <NavBarItem href='#/login' label='login' />
                     </ul>
-
                 </div>
             </div>
         </div>
