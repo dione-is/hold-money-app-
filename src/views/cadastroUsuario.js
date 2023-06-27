@@ -1,7 +1,8 @@
 import React from "react";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-
+import UsuarioService from "../app/service/usuarioService";
+import { mensagemSucesso, mensagemError } from "../components/toastr";
 
 class CadastroUsuario extends React.Component {
 
@@ -12,8 +13,58 @@ class CadastroUsuario extends React.Component {
         senharepita: ''
     }
 
+    constructor() {
+        super();
+        this.service = new UsuarioService();
+    }
+
     salvar = () => {
-        console.log(this.state.email + '\n' + this.state.nome + '\n' + this.state.senha + '\n' + this.state.senharepita + '\n')
+        const msgsError = this.validar();
+
+        if (msgsError && msgsError.length > 0) {
+            msgsError.forEach((msg, i ) => {
+                mensagemError(msg);
+            })
+        } else {
+            const usuario = {
+                nome: this.state.nome,
+                email: this.state.email,
+                senha: this.state.senha
+            }
+
+            this.service.salvar(usuario)
+                .then(response => {
+                    mensagemSucesso('Usuario Cadastrado com Sucesso.');
+                    this.props.history.push('/login');
+                })
+                .catch(error => {
+                    mensagemError(error.response.data.message);
+                });
+        }
+    }
+
+    validar() {
+        const msgs = [];
+
+        if (!this.state.nome) {
+            msgs.push('O campo nome e obrigatorio');
+        }
+        if (!this.state.email) {
+            msgs.push('O campo email e obrigatorio');
+        } else if (!this.state.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+            msgs.push('Informe um email valido');
+        }
+        if (!this.state.senha || !this.state.senharepita) {
+            msgs.push('Os campos Senha e repita senha sao obrigatorios')
+        } else if (this.state.senha !== this.state.senharepita) {
+            msgs.push('As senhas nao conferem');
+        }
+
+        return msgs;
+    }
+
+    cancelar = () => {
+        this.props.history.push('/login');
     }
 
     render() {
@@ -42,7 +93,7 @@ class CadastroUsuario extends React.Component {
                                 </FormGroup>
                                 <div className='col-sm-12' style={{ marginTop: '20px' }}>
                                     <button type='button' className="btn btn-success col-sm-3" onClick={this.salvar}>Salvar</button>
-                                    <button type='button' className="btn btn-danger col-sm-3 " style={{ marginLeft: '20px' }}>Voltar</button>
+                                    <button type='button' className="btn btn-danger col-sm-3 " style={{ marginLeft: '20px' }} onClick={this.cancelar}>Voltar</button>
                                 </div>
                             </div>
                         </div>

@@ -1,33 +1,46 @@
 import React from 'react';
 import Card from '../components/card';
 import FormGroup from '../components/form-group';
-import axios from 'axios';
+import { withRouter } from 'react-router-dom';
+import UsuarioService from '../app/service/usuarioService';
+import LocalStorageService from '../app/service/localStorageService';
+import {mensagemError, mensagemSucesso} from '../components/toastr'
+
 
 class Login extends React.Component {
     state = {
         email: '',
-        senha: ''
+        senha: '',
     }
 
-    entrar = () => {
-        console.log("email: " + this.state.email + "\n" + "senha: " + this.state.senha);
+
+    prepareCadastro = () => {
+        this.props.history.push('/novo-usuario')
     }
 
-    autenticar = () =>{
-        axios.post('localhost:8080/autenticar',{
-            email: 'dione@email.com',
-            senha: '123mudar'
+    constructor(){
+        super();
+        this.service = new UsuarioService();
+    }
+
+    autenticar = async () => {
+        await this.service.autenticar({
+            email: this.state.email,
+            senha: this.state.senha
         }).then((response) => {
-            console.log(response.data);
+            mensagemSucesso('Acesso autorizado');
+            LocalStorageService.adicionarItem('_usuario', response.data);
+            this.props.history.push('/home');
         }).catch((err) => {
-            console.error(err);
+            console.log(err)
+            mensagemError(err.response.data.message);
         });
     }
 
     render() {
         return (
             <div className="container">
-                <div className="row" style={{justifyContent: 'center'}}>
+                <div className="row" style={{ justifyContent: 'center' }}>
                     <div className="col-md-6" style={{ position: 'relative', justifyContent: 'center' }}>
                         <div className="bs-docs-section"></div>
                         <Card title="Login">
@@ -38,16 +51,16 @@ class Login extends React.Component {
                                             <FormGroup Label="Email: *" htmlFor="exampleInputEmail1">
                                                 <input
                                                     type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                                                    placeholder="Digite o Email" value={this.state.email}
+                                                    placeholder="Digite o Email" value={this.state.email} name="email"
                                                     onChange={(e) => this.setState({ email: e.target.value })} />
                                             </FormGroup>
                                             <FormGroup Label="Senha: *" htmlFor="exampleInputPassword1">
                                                 <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"
                                                     value={this.state.senha} onChange={e => this.setState({ senha: e.target.value })} />
                                             </FormGroup>
-                                            <div className='col-sm-12' style={{marginTop: '20px'}}>
-                                                <button type='button' onClick={this.entrar} className="btn btn-success col-sm-4">Entrar</button>
-                                                <button type='button' className="btn btn-info col-sm-4 col-sm-offset-4" style={{marginLeft: '20px'}}>Cadastrar</button>
+                                            <div className='col-sm-12' style={{ marginTop: '20px' }}>
+                                                <button type='button' onClick={this.autenticar} className="btn btn-success col-sm-4">Entrar</button>
+                                                <button type='button' className="btn btn-info col-sm-4 col-sm-offset-4" style={{ marginLeft: '20px' }} onClick={this.prepareCadastro}>Cadastrar</button>
                                             </div>
                                         </fieldset>
                                     </div>
@@ -56,10 +69,10 @@ class Login extends React.Component {
                         </Card>
                     </div>
                 </div>
-                
+
             </div>
         )
 
     }
 }
-export default Login;
+export default withRouter(Login);

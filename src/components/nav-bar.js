@@ -14,7 +14,7 @@ function NavBar() {
                     <ul className="navbar-nav">
                         <NavBarItem href="#/home" label="Inicio"/>
                         <NavBarItem href='#/novo-usuario' label='Usuarios'/>
-                        <NavBarItem href='#/' label='Lancamentos'/>
+                        <NavBarItem href='#/consulta-lancamentos' label='Lancamentos'/>
                         <NavBarItem href='#/login' label='login' />
                     </ul>
                 </div>
