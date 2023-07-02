@@ -1,5 +1,4 @@
 import React from "react";
-import { withRouter } from 'react-router-dom'
 import Card from "../../components/card";
 import FormGroup from "../../components/form-group";
 import SelectMenu from "../../components/selectMenu";
@@ -29,12 +28,11 @@ class ConsultaLancamento extends React.Component {
     buscar = () => {
 
         if (!this.state.ano) {
-            messages.mensagemError("Campo ano e Obrigatorio !")
+            messages.mensagemError("Campo ano é Obrigatorio !")
             return false;
         }
 
         let usuarioLogado = LocalStorageService.obterItem('_usuario');
-        usuarioLogado = JSON.parse(usuarioLogado)
         const lancamentoFiltro = {
             ano: this.state.ano,
             mes: this.state.mes,
@@ -43,6 +41,9 @@ class ConsultaLancamento extends React.Component {
         };
 
         this.service.consultar(lancamentoFiltro).then(response => {
+            if(response.data.length < 1){
+                messages.mensagemAlerta("Nenhum Evento Encontrado.");
+            }
             this.setState({ lancamentos: response.data })
         }).catch(err => {
             messages.mensagemError(err);
@@ -50,7 +51,7 @@ class ConsultaLancamento extends React.Component {
     }
 
     editar = (id) => {
-        console.log(id);
+        this.props.history.push(`/novo-lancamento/${id}`);
     }
 
     delete = () => {
@@ -65,12 +66,15 @@ class ConsultaLancamento extends React.Component {
     }
 
     abrirDialogDelete = (lancamento) => {
-        console.log(lancamento);
         this.setState({ visibleDialogDelete: true, lancamentoDeletar: lancamento });
     }
 
     fecharDialogDelete = () => {
         this.setState({ visibleDialogDelete: false });
+    }
+
+    novoLancamento = () => {
+        this.props.history.push("/novo-lancamento");
     }
 
     render() {
@@ -100,8 +104,8 @@ class ConsultaLancamento extends React.Component {
                                     id="inputTipo" className="form-select" value={this.state.tipo} lista={tiposLancamentos} />
                             </FormGroup>
 
-                            <button type="button" className="btn btn-primary" onClick={this.buscar}>Buscar</button>
-                            <button type="button" className="btn btn-info">Cadastrar</button>
+                            <button type="button" className="btn btn-primary mt20" onClick={this.buscar}>Buscar <i className="pi pi-search"></i></button>
+                            <button type="button" className="btn btn-info mt20" onClick={this.novoLancamento}>Cadastrar <i className="pi pi-save"></i></button>
                         </div>
                     </div>
                 </div>

@@ -13,8 +13,8 @@ export default props => {
                 <td>{lancamento.mes}</td>
                 <td>{lancamento.status}</td>
                 <td>
-                    <button className="btn btn-primary" type="button" onClick={e => props.editar(lancamento.id)}>editar</button>
-                    <button className="btn btn-danger" type="button" onClick={e => props.delete(lancamento)}>deletar</button>
+                    <button className="btn btn-primary" type="button" onClick={e => props.editar(lancamento.id)}><i className="pi pi-pencil"></i></button>
+                    <button className="btn btn-danger" type="button" onClick={e => props.delete(lancamento)}><i className="pi pi-trash"></i></button>
                 </td>
             </tr>
         )

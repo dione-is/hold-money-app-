@@ -1,4 +1,5 @@
 import ApiService from '../apiservice';
+import ErroValidacao from '../exception/erroValidacao';
 
 export default class LancamentoService extends ApiService {
     constructor() {
@@ -27,6 +28,17 @@ export default class LancamentoService extends ApiService {
         return this.get(params);
     }
 
+    atualizar(lancamento){
+        return this.put('', lancamento);
+    }
+    buscarPorId(id){
+        return this.get(`${id}`)
+    }
+
+    salvar(lancamento){
+        return this.post('', lancamento);
+    }
+
     deletar(id){
         return this.delete(`${id}`)
     }
@@ -39,12 +51,47 @@ export default class LancamentoService extends ApiService {
         ];
     }
 
+    obterStatus(){
+        return[
+            { label: 'Selecione', value: '' },
+            { label: 'Pendente', value: 'PENDENTE' },
+            { label: 'Cancelado', value: 'CANCELADO' },
+            { label: 'Efetivado', value: 'EFETIVADO' },
+        ];
+    }
+
+    validar(lancamento){
+        const erros = [];
+        if(!lancamento.ano){
+            erros.push("O campo Ano deve ser informado.")
+        }
+        if(!lancamento.descricao){
+            erros.push("O campo Descrição deve ser informado.")
+        }
+        if(!lancamento.mes){
+            erros.push("O campo Mês deve ser informado.")
+        }
+        if(!lancamento.valor){
+            erros.push("O campo Valor deve ser informado.")
+        }
+        if(!lancamento.tipo){
+            erros.push("O campo Tipo deve ser informado.")
+        }
+        if(!lancamento.status){
+            erros.push("O campo Status deve ser informado.")
+        }
+
+        if(erros.length > 0){
+            throw new ErroValidacao(erros);
+        }
+    }
+
     obterMeses(){
         return [
             { label: 'Selecione...', value: '' },
             { label: 'Janeiro', value: 1 },
             { label: 'Fevereiro', value: 2 },
-            { label: 'Marco', value: 3 },
+            { label: 'Março', value: 3 },
             { label: 'Abril', value: 4 },
             { label: 'Maio', value: 5 },
             { label: 'Junho', value: 6 },

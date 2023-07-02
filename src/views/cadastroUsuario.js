@@ -19,18 +19,15 @@ class CadastroUsuario extends React.Component {
     }
 
     salvar = () => {
-        const msgsError = this.validar();
-
-        if (msgsError && msgsError.length > 0) {
-            msgsError.forEach((msg, i ) => {
-                mensagemError(msg);
-            })
-        } else {
+        try {
             const usuario = {
                 nome: this.state.nome,
                 email: this.state.email,
-                senha: this.state.senha
+                senha: this.state.senha,
+                senharepita: this.state.senharepita
             }
+
+            this.service.validar(usuario)
 
             this.service.salvar(usuario)
                 .then(response => {
@@ -40,6 +37,11 @@ class CadastroUsuario extends React.Component {
                 .catch(error => {
                     mensagemError(error.response.data.message);
                 });
+
+        } catch (error) {
+            error.mensagens.forEach((msg) => {
+                mensagemError(msg);
+            })
         }
     }
 
@@ -92,8 +94,8 @@ class CadastroUsuario extends React.Component {
                                         value={this.state.senharepita} onChange={e => this.setState({ senharepita: e.target.value })} />
                                 </FormGroup>
                                 <div className='col-sm-12' style={{ marginTop: '20px' }}>
-                                    <button type='button' className="btn btn-success col-sm-3" onClick={this.salvar}>Salvar</button>
-                                    <button type='button' className="btn btn-danger col-sm-3 " style={{ marginLeft: '20px' }} onClick={this.cancelar}>Voltar</button>
+                                    <button type='button' className="btn btn-success col-sm-3" onClick={this.salvar}>Salvar <i className="pi pi-save"></i></button>
+                                    <button type='button' className="btn btn-danger col-sm-3 " style={{ marginLeft: '20px' }} onClick={this.cancelar}>Voltar <i className="pi pi-times"></i></button>
                                 </div>
                             </div>
                         </div>
